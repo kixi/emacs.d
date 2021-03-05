@@ -43,7 +43,7 @@
   (use-package corkey
     :config
     (corkey-mode 1)
-    (corkey/install-bindings)))
+    (corkey/install-bindings 'my-keys)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Your own stuff goes here, we recommend these extra packages
@@ -60,3 +60,11 @@
 (global-linum-mode 1)
 
 (load-theme 'tsdh-dark t)
+(use-package flycheck :ensure t :init (global-flycheck-mode))
+(use-package flycheck-clj-kondo :ensure t)
+(require 'flycheck-clj-kondo)
+
+(defun fch ()
+  (require 'flycheck-clj-kondo))
+
+(add-hook 'clojure-mode-hook 'fch)
