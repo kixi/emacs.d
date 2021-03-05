@@ -13,7 +13,7 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-  
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install and enable use-package
 
@@ -64,7 +64,16 @@
 (use-package flycheck-clj-kondo :ensure t)
 (require 'flycheck-clj-kondo)
 
-(defun fch ()
-  (require 'flycheck-clj-kondo))
 
-(add-hook 'clojure-mode-hook 'fch)
+(add-hook 'clojure-mode-hook (lambda ()
+                               (require 'flycheck-clj-kondo)
+                               (evil-cleverparens-mode)
+                               (show-paren-mode)))
+(add-hook 'before-save-hook
+          (lambda ()
+            (when (derived-mode-p 'prog-mode)
+              (delete-trailing-whitespace))))
+(setq cider-repl-display-help-banner nil)
+(setq cider-repl-pop-to-buffer-on-connect nil)
+
+;(add-hook 'clojure-mode-hook 'show-paren-mode)
