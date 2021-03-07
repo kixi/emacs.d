@@ -1,8 +1,5 @@
 ;; ~/.emacs or ~/.emacs.d/init.el
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Install straight.el
-
 (defvar bootstrap-version)
 
 (let ((install-url "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el")
@@ -21,18 +18,18 @@
 
 (setq straight-use-package-by-default t)
 
-(require' use-package)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Install Corgi
-
+(require 'use-package)
 (use-package corgi-packages
   :straight (corgi-packages
              :type git
              :host github
+	     :branch "dev"
              :repo "kixi/corgi-packages"))
 
 (add-to-list #'straight-recipe-repositories 'corgi-packages)
-
+(use-package evil)
 (let ((straight-current-profile 'corgi))
   (use-package corgi-defaults)
   (use-package corgi-editor)
@@ -59,7 +56,9 @@
 
 (global-linum-mode 1)
 
-(load-theme 'tsdh-dark t)
+(use-package dracula-theme)
+(load-theme 'dracula t)
+;(load-theme 'wombat t)
 (use-package flycheck :ensure t :init (global-flycheck-mode))
 (use-package flycheck-clj-kondo :ensure t)
 (require 'flycheck-clj-kondo)
@@ -76,4 +75,6 @@
 (setq cider-repl-display-help-banner nil)
 (setq cider-repl-pop-to-buffer-on-connect nil)
 
-;(add-hook 'clojure-mode-hook 'show-paren-mode)
+                                        ;(add-hook 'clojure-mode-hook 'show-paren-mode)
+(when (not (server-running-p))
+  (server-start))
