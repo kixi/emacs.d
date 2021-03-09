@@ -56,13 +56,18 @@
 
 (global-linum-mode 1)
 
-(use-package dracula-theme)
-(load-theme 'dracula t)
-;(load-theme 'wombat t)
+                                        ;(use-package dracula-theme)
+                                        ;(load-theme 'dracula t)
+(load-theme 'tango-dark t)
 (use-package flycheck :ensure t :init (global-flycheck-mode))
 (use-package flycheck-clj-kondo :ensure t)
 (require 'flycheck-clj-kondo)
 
+(defun cljfmt ()
+  (when (or (eq major-mode 'clojure-mode)
+            (eq major-mode 'clojurescript-mode))
+    (shell-command-to-string (format "/opt/clojure/cljfmt.bin %s" buffer-file-name))
+    (revert-buffer :ignore-auto :noconfirm)))
 
 (add-hook 'clojure-mode-hook (lambda ()
                                (require 'flycheck-clj-kondo)
@@ -72,9 +77,11 @@
           (lambda ()
             (when (derived-mode-p 'prog-mode)
               (delete-trailing-whitespace))))
+
+(add-hook 'after-save-hook #'cljfmt)
+
 (setq cider-repl-display-help-banner nil)
 (setq cider-repl-pop-to-buffer-on-connect nil)
 
-                                        ;(add-hook 'clojure-mode-hook 'show-paren-mode)
 (when (not (server-running-p))
   (server-start))
